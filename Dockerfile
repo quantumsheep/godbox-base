@@ -12,6 +12,10 @@ RUN set -xe && \
 
 COPY modules modules
 
-RUN for module in modules/*; do bash $module; done
+RUN bash modules/gcc.sh
+RUN bash modules/go.sh
+RUN bash modules/nodejs.sh
+RUN bash modules/python.sh
+RUN bash modules/ruby.sh
 
 CMD /bin/bash
