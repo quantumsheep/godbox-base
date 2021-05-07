@@ -17,5 +17,11 @@ RUN bash modules/go.sh
 RUN bash modules/nodejs.sh
 RUN bash modules/python.sh
 RUN bash modules/ruby.sh
+RUN bash modules/rust.sh
+
+RUN set -xe && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends cmake && \
+    rm -rf /var/lib/apt/lists/*
 
 CMD /bin/bash
