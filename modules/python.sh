@@ -2,12 +2,18 @@
 
 set -xe
 
-export PYTHON_VERSIONS="3.9.4"
+export PYTHON_VERSIONS="2.7.18 3.9.6"
 
-apt-get update
-apt-get install -y --no-install-recommends zstd
+for VERSION in $PYTHON_VERSIONS; do
+    ARCHIVE="python-$VERSION.tar.xz"
 
-ARCHIVE="cpython-3.9.4-x86_64-unknown-linux-gnu-pgo+lto-20210414T1515.tar.zst"
-curl -fSsL "https://github.com/indygreg/python-build-standalone/releases/download/20210415/$ARCHIVE" -o /tmp/$ARCHIVE
-mkdir /tmp/python-3.9.4
-tar -axvf /tmp/$ARCHIVE -C /tmp/python-3.9.4 --strip-components=1
+    curl -fSsL "https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tar.xz" -o /tmp/$ARCHIVE
+    mkdir /tmp/python-$VERSION
+    tar -xf /tmp/$ARCHIVE -C /tmp/python-$VERSION --strip-components=1
+    rm /tmp/$ARCHIVE
+    cd /tmp/python-$VERSION
+    ./configure --prefix=/usr/local/python-$VERSION
+    make -j$(nproc)
+    make -j$(nproc) install
+    rm -rf /tmp/*;
+done
